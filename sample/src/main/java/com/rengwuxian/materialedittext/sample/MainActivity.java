@@ -1,7 +1,7 @@
 package com.rengwuxian.materialedittext.sample;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
 		initSingleLineEllipsisEt();
 		initSetErrorEt();
 		initValidationEt();
-	}
+  }
 
 	private void initEnableBt() {
 		final EditText basicEt = (EditText) findViewById(R.id.basicEt);
@@ -43,28 +44,41 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private void initSetErrorEt() {
-		final EditText errorTextEt = (EditText) findViewById(R.id.errorTextEt);
+		final EditText bottomTextEt = (EditText) findViewById(R.id.bottomTextEt);
 		final Button setErrorBt = (Button) findViewById(R.id.setErrorBt);
 		setErrorBt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				errorTextEt.setError("Error");
+				bottomTextEt.setError("1-line Error!");
+			}
+		});
+		final Button setError2Bt = (Button) findViewById(R.id.setError2Bt);
+    setError2Bt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bottomTextEt.setError("2-line\nError!");
+			}
+		});
+		final Button setError3Bt = (Button) findViewById(R.id.setError3Bt);
+    setError3Bt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bottomTextEt.setError("So Many Errors! So Many Errors! So Many Errors! So Many Errors! So Many Errors! So Many Errors! So Many Errors! So Many Errors!");
 			}
 		});
 	}
 
 	private void initValidationEt() {
 		final MaterialEditText validationEt = (MaterialEditText) findViewById(R.id.validationEt);
+    validationEt.addValidator(new RegexpValidator("Only Integer Valid!", "\\d+"));
 		final Button validateBt = (Button) findViewById(R.id.validateBt);
 		validateBt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// validate
-				validationEt.validate("\\d+", "Only Integer Valid!");
-
-				// or you can directly use validationEt.isValid(String regex) to do some other work.
-			}
-		});
+      @Override
+      public void onClick(View v) {
+        // validate
+        validationEt.validate();
+      }
+    });
 	}
 
 	@Override

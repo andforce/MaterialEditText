@@ -18,7 +18,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -43,12 +43,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * EditText in Material Design
- * <p/>
- * author:rengwuxian
- * <p/>
+ * Created by rengwuxian on 2015/1/8.
  */
-public class MaterialEditText extends AppCompatEditText {
+public class MaterialMultiAutoCompleteTextView extends AppCompatMultiAutoCompleteTextView {
 
   @IntDef({FLOATING_LABEL_NONE, FLOATING_LABEL_NORMAL, FLOATING_LABEL_HIGHLIGHT})
   public @interface FloatingLabelType {
@@ -315,27 +312,23 @@ public class MaterialEditText extends AppCompatEditText {
   private List<METValidator> validators;
   private METLengthChecker lengthChecker;
 
-  public MaterialEditText(Context context) {
+  public MaterialMultiAutoCompleteTextView(Context context) {
     super(context);
     init(context, null);
   }
 
-  public MaterialEditText(Context context, AttributeSet attrs) {
+  public MaterialMultiAutoCompleteTextView(Context context, AttributeSet attrs) {
     super(context, attrs);
     init(context, attrs);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public MaterialEditText(Context context, AttributeSet attrs, int style) {
+  public MaterialMultiAutoCompleteTextView(Context context, AttributeSet attrs, int style) {
     super(context, attrs, style);
     init(context, attrs);
   }
 
   private void init(Context context, AttributeSet attrs) {
-    if (isInEditMode()) {
-        return;
-    }
-
     iconSize = getPixel(32);
     iconOuterWidth = getPixel(48);
     iconOuterHeight = getPixel(32);
@@ -418,11 +411,11 @@ public class MaterialEditText extends AppCompatEditText {
     typedArray.recycle();
 
     int[] paddings = new int[]{
-        android.R.attr.padding, // 0
-        android.R.attr.paddingLeft, // 1
-        android.R.attr.paddingTop, // 2
-        android.R.attr.paddingRight, // 3
-        android.R.attr.paddingBottom // 4
+      android.R.attr.padding, // 0
+      android.R.attr.paddingLeft, // 1
+      android.R.attr.paddingTop, // 2
+      android.R.attr.paddingRight, // 3
+      android.R.attr.paddingBottom // 4
     };
     TypedArray paddingsTypedArray = context.obtainStyledAttributes(attrs, paddings);
     int padding = paddingsTypedArray.getDimensionPixelSize(0, 0);
@@ -820,8 +813,8 @@ public class MaterialEditText extends AppCompatEditText {
     textPaint.setTextSize(bottomTextSize);
     if (tempErrorText != null || helperText != null) {
       Layout.Alignment alignment = (getGravity() & Gravity.RIGHT) == Gravity.RIGHT || isRTL() ?
-          Layout.Alignment.ALIGN_OPPOSITE : (getGravity() & Gravity.LEFT) == Gravity.LEFT ?
-          Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_CENTER;
+        Layout.Alignment.ALIGN_OPPOSITE : (getGravity() & Gravity.LEFT) == Gravity.LEFT ?
+        Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_CENTER;
       textLayout = new StaticLayout(tempErrorText != null ? tempErrorText : helperText, textPaint, getWidth() - getBottomTextLeftOffset() - getBottomTextRightOffset() - getPaddingLeft() - getPaddingRight(), alignment, 1.0f, 0.0f, true);
       destBottomLines = Math.max(textLayout.getLineCount(), minBottomTextLines);
     } else {
@@ -1216,7 +1209,7 @@ public class MaterialEditText extends AppCompatEditText {
    * @param validator Validator to add
    * @return This instance, for easy chaining
    */
-  public MaterialEditText addValidator(METValidator validator) {
+  public MaterialMultiAutoCompleteTextView addValidator(METValidator validator) {
     if (validators == null) {
       this.validators = new ArrayList<>();
     }
@@ -1275,9 +1268,8 @@ public class MaterialEditText extends AppCompatEditText {
 
   @Override
   protected void onDraw(@NonNull Canvas canvas) {
-
-    int startX = getScrollX() + (iconLeftBitmaps == null ? 0 : (iconOuterWidth + iconPadding)) + getPaddingLeft();
-    int endX = getScrollX() + (iconRightBitmaps == null ? getWidth() : getWidth() - iconOuterWidth - iconPadding) - getPaddingRight();
+    int startX = getScrollX() + (iconLeftBitmaps == null ? 0 : (iconOuterWidth + iconPadding));
+    int endX = getScrollX() + (iconRightBitmaps == null ? getWidth() : getWidth() - iconOuterWidth - iconPadding);
     int lineStartY = getScrollY() + getHeight() - getPaddingBottom();
 
     // draw the icon(s)
